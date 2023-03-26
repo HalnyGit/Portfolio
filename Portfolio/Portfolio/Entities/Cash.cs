@@ -6,7 +6,7 @@
 
         public decimal Nominal { get; set; }
 
-        public override string ToString() => $"Id: {Id}, Currency: {Currency}, Nominal: {Nominal}";
+        public override string ToString() => $"Id: {Id}, Cash, Currency: {Currency}, Nominal: {Nominal}";
 
     }
 }
