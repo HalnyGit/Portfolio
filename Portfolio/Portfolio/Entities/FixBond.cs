@@ -3,6 +3,6 @@
     public class FixBond : Bond
     { 
 
-        public override string ToString() => $"{base.ToString()} Coupon: {Coupon}";
+        public override string ToString() => $"{base.ToString()}";
     }
 }
