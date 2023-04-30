@@ -7,15 +7,12 @@ using System.Runtime.CompilerServices;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
-string path = $"{Directory.GetCurrentDirectory()}\\Portfolio";
-string[] files = {$"{path}\\portfolio.txt", $"{path}\\log.txt"};
-
 
 try
 {
-    if (!Directory.Exists(path))
+    if (!Directory.Exists(Constants.path))
     {
-        Directory.CreateDirectory(path);
+        Directory.CreateDirectory(Constants.path);
     }
 }
 catch (Exception exception)
@@ -24,7 +21,7 @@ catch (Exception exception)
 }
 
 
-foreach (string file in files)
+foreach (string file in Constants.files)
 {
     if (!CheckFileExists(file))
     {
@@ -38,7 +35,7 @@ var bondRepository = new SqlRepository<Bond>(new PortfolioDbContext());
 bondRepository.ItemAdded += BondRepositoryOnItemAdded;
 bondRepository.ItemRemoved += BondRepositoryOnItemRemoved;
 
-string[] lines = File.ReadAllLines($"{path}\\portfolio.txt");
+string[] lines = File.ReadAllLines($"{Constants.path}\\portfolio.txt");
 var numberOfLines = lines.Length;
 if (numberOfLines > 0)
 {
@@ -86,7 +83,7 @@ while (true)
             bondRepository.Add(zerobond);
         }
         bondRepository.Save();
-        SaveRepoToFile(bondRepository, files[0]);
+        SaveRepoToFile(bondRepository, Constants.files[0]);
 
     }
     else if (input == "3")
@@ -101,7 +98,7 @@ while (true)
 
     if (input == "q")
     {
-        SaveRepoToFile(bondRepository, files[0]);
+        SaveRepoToFile(bondRepository, Constants.files[0]);
         closeApp = true;
         Console.WriteLine("Application closed");
         break;
@@ -139,10 +136,7 @@ static void SaveRepoToFile(IRepository<Bond> repository, string file)
 
 static void SaveToLog(string message)
 {
-    string path = $"{Directory.GetCurrentDirectory()}\\Portfolio";
-    string logFile = $"{path}\\log.txt";
-
-    using (var writer = File.AppendText(logFile))
+    using (var writer = File.AppendText(Constants.files[1]))
     {
         writer.WriteLine(message);
     }
