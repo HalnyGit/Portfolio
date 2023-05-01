@@ -25,7 +25,7 @@ foreach (string file in Constants.files)
 {
     if (!CheckFileExists(file))
     {
-        using (FileStream fs = File.Create(file));
+        using (FileStream fs = File.Create(file)) ;
     }
 }
 
@@ -53,16 +53,16 @@ bool closeApp = false;
 while (true)
 {
     var input = Console.ReadLine();
-    if(input == "1")
+    if (input == "1")
     {
         Console.WriteLine("Portfolio content:");
         var bonds = bondRepository.GetAll();
-        foreach(Bond bond in bonds)
+        foreach (Bond bond in bonds)
         {
             Console.WriteLine(bond);
         }
     }
-    else if(input == "2")
+    else if (input == "2")
     {
         Console.WriteLine("Add bond -> Enter bond name");
         string bondName = Console.ReadLine();
@@ -74,12 +74,12 @@ while (true)
         {
             Console.WriteLine("Enter coupon of the bond");
             string coupon = Console.ReadLine();
-            FixBond fixbond = new FixBond { BondName = bondName, Currency = "PLN", FaceValue = 1000, Coupon = coupon};
+            FixBond fixbond = new FixBond { BondName = bondName, Currency = "PLN", FaceValue = 1000, Coupon = coupon };
             bondRepository.Add(fixbond);
         }
         else if (bondType == "2")
         {
-            ZeroBond zerobond = new ZeroBond { BondName = bondName, Currency = "PLN", FaceValue = 1000 };
+            ZeroBond zerobond = new ZeroBond { BondName = bondName, Currency = "PLN", FaceValue = 1000, Coupon = "0"};
             bondRepository.Add(zerobond);
         }
         bondRepository.Save();
