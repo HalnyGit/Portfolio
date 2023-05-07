@@ -4,6 +4,8 @@ namespace Portfolio.DataProviders;
 
 public interface IBondsProvider
 {
+    List<Bond> GetBonds();
+
     // select
     List<string>? GetCurrency();
     decimal? GetLowestCoupon();
@@ -23,5 +25,5 @@ public interface IBondsProvider
 
     // single
     Bond? SingleOrDefaultById(int id);
-    
+
 }

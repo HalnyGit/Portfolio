@@ -1,46 +1,54 @@
 ﻿using Portfolio.Entities;
 using Portfolio.Repositories;
+using System.Diagnostics.Metrics;
 using System.Reflection.Metadata.Ecma335;
+using System.Threading.Channels;
 
 namespace Portfolio.DataProviders;
 
 public class BondsProvider : IBondsProvider
 {
     private readonly IRepository<Bond> _bondsRepository;
-    private readonly List<Bond> _bonds;
+
 
     public BondsProvider(IRepository<Bond> bondsRepository)
     {
         _bondsRepository= bondsRepository;
-        _bonds = _bondsRepository.GetAll().ToList();
+
+    }
+
+    public List<Bond> GetBonds()
+    // if var _bonds is declared as a private field (variable) and it is initialized in the constructor with the value returned from the _bondsRepository.GetAll().ToList()
+    // then this implementation causes an issue because the  following methods (for instance GetCurrency())are not aware of any changes made to _bonds after its initialization.
+    // so, if new bonds are added to the repository after the initialization of _bonds, they will not be present in the _bonds list,
+    // which can result in inconsistencies between the returned results and the actual data in the repository and in short _bonds can return null list
+    {
+        return _bondsRepository.GetAll().ToList();
     }
 
 
-    // select
+// select
     public List<string> GetCurrency()
-    {
-        return _bonds.Select(bond => bond.Currency).Distinct().ToList();
-    }
+{
+    return GetBonds().Select(bond => bond.Currency).Distinct().ToList();
+}
+public decimal? GetLowestCoupon()
+{
+    return GetBonds().Select(bond => bond.Coupon).Min();
+}
+public decimal? GetHighestCoupon()
+{
+    return GetBonds().Select(bond => bond.Coupon).Max();
+}
 
-    public decimal? GetLowestCoupon()
-    {
-        return _bonds.Select(bond => bond.Coupon).Min();
-    }
-
-    public decimal? GetHighestCoupon()
-    {
-        return _bonds.Select(bond => bond.Coupon).Max();
-    }
-
-    // order by
+// order by
     public List<Bond> OrderyByCoupon()
-    {
-        return _bonds.OrderBy(bond => bond.Coupon).ToList();
-    }
-
-    public List<Bond> OrderByCurrencyAndCoupon()
-    {
-        return _bonds
+{
+    return GetBonds().OrderBy(bond => bond.Coupon).ToList();
+}
+public List<Bond> OrderByCurrencyAndCoupon()
+{
+        return GetBonds()
             .OrderBy(bond => bond.Currency)
             .ThenBy(bond => bond.Coupon).ToList();
     }
@@ -49,25 +57,25 @@ public class BondsProvider : IBondsProvider
     public Bond? GetLowestCouponBond()
     {
         decimal? minCoupon = GetLowestCoupon();
-        return _bonds.FirstOrDefault(Bond => Bond.Coupon == minCoupon);
+        return GetBonds().FirstOrDefault(Bond => Bond.Coupon == minCoupon);
     }
 
     public Bond? GetHighestCouponBond()
     {
         decimal? maxCoupon = GetLowestCoupon();
-        return _bonds.FirstOrDefault(Bond => Bond.Coupon == maxCoupon);
+        return GetBonds().FirstOrDefault(Bond => Bond.Coupon == maxCoupon);
     }
 
     // where
     public List<Bond> GetOneCurrencyBondsOnly(string currency)
     {
-        return _bonds.Where(Bond => Bond.Currency == currency).ToList();
+        return GetBonds().Where(Bond => Bond.Currency == currency).ToList();
     }
 
     // single
     public Bond? SingleOrDefaultById(int id)
     {
-        return _bonds.SingleOrDefault(Bond => Bond.Id == id);
+        return GetBonds().SingleOrDefault(Bond => Bond.Id == id);
     }
 
 
