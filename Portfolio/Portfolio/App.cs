@@ -1,6 +1,7 @@
 ﻿using Portfolio.DataProviders;
 using Portfolio.Entities;
 using Portfolio.Repositories;
+using Portfolio.UserCommunication;
 
 namespace Portfolio;
 
@@ -8,12 +9,15 @@ public class App : IApp
 {
     private readonly IRepository<Bond> _bondsRepository;
     private readonly IBondsProvider _bondsProvider;
+    private readonly IUserCommunication _userCommunication;
 
     public App(IRepository<Bond> bondsRepository,
-                IBondsProvider bondsProvider)
+                IBondsProvider bondsProvider,
+                IUserCommunication userCommunication)
     {
         _bondsRepository = bondsRepository;
         _bondsProvider = bondsProvider;
+        _userCommunication = userCommunication;
     }
 
     public void Run()
@@ -33,20 +37,88 @@ public class App : IApp
             Console.WriteLine(item);
         }
 
+        Console.WriteLine("====================================");
 
-        foreach (var item in _bondsProvider.GetCurrency())
+        _userCommunication.ShowMenu();
+        bool closeApp = false;
+
+        while(true)
         {
-            Console.WriteLine($"Currency {item}");
+            var input = Console.ReadLine();
+            if(input == "1") // display portfolio
+            {
+                _userCommunication.DisplayPortfolio(_bondsProvider.GetBonds());
+            }
+            else if (input == "2") // add bond
+            {
+                Console.WriteLine("Add bond");
+                string bondName = _userCommunication.GetBondNameFromUser();
+                string currency = _userCommunication.GetCurrencyFromUser();
+                decimal faceValue = _userCommunication.GetFaceValueFromUser();
+
+                Console.WriteLine("Choose bond type: \n (1) - for fix bond \n (2) - for zero bond:");
+                var bondType = Console.ReadLine();
+
+                var bond = new Bond();
+                if (bondType == "1")
+                {
+                    decimal coupon = _userCommunication.GetCouponFromUser();
+                    bond = new FixBond
+                    {
+                        BondName = bondName,
+                        Currency = currency,
+                        FaceValue = faceValue,
+                        Coupon = coupon
+                    };
+                }
+                else if (bondType == "2")
+                {
+                    bond = new ZeroBond
+                    {
+                        BondName = bondName,
+                        Currency = currency,
+                        FaceValue = faceValue,
+                    };
+                }
+                _bondsRepository.Add(bond);
+            }
+            else if (input == "3") // remove bond
+            {
+                Console.WriteLine("Remove bond");
+
+                int idToRemove = _userCommunication.GetBondIdFromUser();
+                var existingIds = _bondsProvider.GetIds();
+                if(existingIds.Count == 0)
+                {
+                    Console.WriteLine("No bonds in portfolio to remove");
+                }
+                else
+                {
+                    while (!existingIds.Contains(idToRemove))
+                    {
+                        Console.WriteLine($"ID:{idToRemove} does not exist in the repository");
+                        idToRemove = _userCommunication.GetBondIdFromUser();
+                    }
+                    Bond bondToRemove = _bondsRepository.GetById(idToRemove);
+                    _bondsRepository.Remove(bondToRemove);
+                }              
+            }
+
+            if(input == "q") // quit application
+            {
+                //_bondsProvider.Save();
+                closeApp = true;
+                _userCommunication.DisplayMessage("Application closed");
+                break;
+            }
+            else
+            {
+                _userCommunication.DisplayMessage("\nPlease continue, select an action from the menu:");
+                _userCommunication.ShowMenu();
+            }
         }
 
-        Console.WriteLine(_bondsProvider.GetLowestCouponBond());
-
-
     }
-
-
-
-
 
     public static List<Bond> GenerateSampleBonds()
     {

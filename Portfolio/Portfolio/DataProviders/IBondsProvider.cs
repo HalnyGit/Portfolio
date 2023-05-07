@@ -7,7 +7,8 @@ public interface IBondsProvider
     List<Bond> GetBonds();
 
     // select
-    List<string>? GetCurrency();
+    List<string?> GetCurrency();
+    List<int> GetIds();
     decimal? GetLowestCoupon();
     decimal? GetHighestCoupon();
 

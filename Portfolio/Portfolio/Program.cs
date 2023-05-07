@@ -3,11 +3,13 @@ using Portfolio;
 using Portfolio.DataProviders;
 using Portfolio.Entities;
 using Portfolio.Repositories;
+using Portfolio.UserCommunication;
 
 var services = new ServiceCollection();
 services.AddSingleton<IApp, App>();
 services.AddSingleton<IRepository<Bond>, ListRepository<Bond>>();
 services.AddSingleton<IBondsProvider, BondsProvider>();
+services.AddSingleton<IUserCommunication, UserCommunication>();
 
 var serviceProvider = services.BuildServiceProvider();
 var app = serviceProvider.GetService<IApp>();
@@ -32,16 +34,6 @@ app.Run();
 
 //Console.WriteLine(b1);
 //Console.WriteLine(b2); 
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -121,7 +113,7 @@ app.Run();
 //            Console.WriteLine("Enter coupon of the bond");
 //            string couponString = Console.ReadLine();
 //            decimal coupon;
-//            if(Decimal.TryParse(couponString, out coupon))
+//            if (Decimal.TryParse(couponString, out coupon))
 //            {
 //                FixBond fixbond = new FixBond { BondName = bondName, Currency = "PLN", FaceValue = 1000, Coupon = coupon };
 //                bondRepository.Add(fixbond);
@@ -133,7 +125,7 @@ app.Run();
 //        }
 //        else if (bondType == "2")
 //        {
-//            ZeroBond zerobond = new ZeroBond { BondName = bondName, Currency = "PLN", FaceValue = 1000, Coupon = 0};
+//            ZeroBond zerobond = new ZeroBond { BondName = bondName, Currency = "PLN", FaceValue = 1000, Coupon = 0 };
 //            bondRepository.Add(zerobond);
 //        }
 //        bondRepository.Save();

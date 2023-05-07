@@ -1,8 +1,5 @@
 ﻿using Portfolio.Entities;
 using Portfolio.Repositories;
-using System.Diagnostics.Metrics;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading.Channels;
 
 namespace Portfolio.DataProviders;
 
@@ -27,27 +24,32 @@ public class BondsProvider : IBondsProvider
     }
 
 
-// select
-    public List<string> GetCurrency()
-{
-    return GetBonds().Select(bond => bond.Currency).Distinct().ToList();
-}
-public decimal? GetLowestCoupon()
-{
-    return GetBonds().Select(bond => bond.Coupon).Min();
-}
-public decimal? GetHighestCoupon()
-{
-    return GetBonds().Select(bond => bond.Coupon).Max();
-}
+    // select
+    public List<int> GetIds()
+    {
+        return GetBonds().Select(bond => bond.Id).Distinct().ToList();
+    }
+
+    public List<string?> GetCurrency()
+    {
+        return GetBonds().Select(bond => bond.Currency).Distinct().ToList();
+    }
+    public decimal? GetLowestCoupon()
+    {
+        return GetBonds().Select(bond => bond.Coupon).Min();
+    }
+    public decimal? GetHighestCoupon()
+    {
+        return GetBonds().Select(bond => bond.Coupon).Max();
+    }
 
 // order by
     public List<Bond> OrderyByCoupon()
 {
     return GetBonds().OrderBy(bond => bond.Coupon).ToList();
 }
-public List<Bond> OrderByCurrencyAndCoupon()
-{
+    public List<Bond> OrderByCurrencyAndCoupon()
+    {
         return GetBonds()
             .OrderBy(bond => bond.Currency)
             .ThenBy(bond => bond.Coupon).ToList();
@@ -62,7 +64,7 @@ public List<Bond> OrderByCurrencyAndCoupon()
 
     public Bond? GetHighestCouponBond()
     {
-        decimal? maxCoupon = GetLowestCoupon();
+        decimal? maxCoupon = GetHighestCoupon();
         return GetBonds().FirstOrDefault(Bond => Bond.Coupon == maxCoupon);
     }
 
@@ -77,7 +79,6 @@ public List<Bond> OrderByCurrencyAndCoupon()
     {
         return GetBonds().SingleOrDefault(Bond => Bond.Id == id);
     }
-
 
 
 }
