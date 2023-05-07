@@ -1,0 +1,6 @@
+﻿namespace Portfolio;
+
+public interface IApp
+{
+    void Run();
+}
