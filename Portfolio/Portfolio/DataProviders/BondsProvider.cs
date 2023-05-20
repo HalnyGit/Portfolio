@@ -15,14 +15,14 @@ public class BondsProvider : IBondsProvider
     }
 
     public List<Bond> GetBonds()
-    // if var _bonds is declared as a private field (variable) and it is initialized in the constructor with the value returned from the _bondsRepository.GetAll().ToList()
-    // then this implementation causes an issue because the  following methods (for instance GetCurrency())are not aware of any changes made to _bonds after its initialization.
+    // if variable _bonds is declared as a private field (variable) and it is initialized in the constructor with the value returned from the _bondsRepository.GetAll().ToList()
+    // then it causes an issue because the  following methods (for instance GetCurrency())are not aware of any changes made to _bonds after its initialization.
     // so, if new bonds are added to the repository after the initialization of _bonds, they will not be present in the _bonds list,
     // which can result in inconsistencies between the returned results and the actual data in the repository and in short _bonds can return null list
+    // hence the reason for GetBonds() method
     {
         return _bondsRepository.GetAll().ToList();
     }
-
 
     // select
     public List<int> GetIds()

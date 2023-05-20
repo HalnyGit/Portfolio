@@ -2,6 +2,7 @@
 using Portfolio;
 using Portfolio.DataProviders;
 using Portfolio.Entities;
+using Portfolio.FileManager;
 using Portfolio.Repositories;
 using Portfolio.UserCommunication;
 
@@ -10,6 +11,7 @@ services.AddSingleton<IApp, App>();
 services.AddSingleton<IRepository<Bond>, ListRepository<Bond>>();
 services.AddSingleton<IBondsProvider, BondsProvider>();
 services.AddSingleton<IUserCommunication, UserCommunication>();
+services.AddSingleton<IFileManager, FileManager>();
 
 var serviceProvider = services.BuildServiceProvider();
 var app = serviceProvider.GetService<IApp>();
