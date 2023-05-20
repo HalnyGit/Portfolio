@@ -1,8 +1,5 @@
-﻿using Microsoft.Extensions.Primitives;
+﻿using Portfolio.DataProviders;
 using Portfolio.Entities;
-using Portfolio.Repositories;
-using System.Linq.Expressions;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Portfolio.UserCommunication;
 
@@ -89,5 +86,60 @@ public class UserCommunication : IUserCommunication
             canParse = Decimal.TryParse(input, out coupon);
         }
         return coupon;
+    }
+
+    public Bond MakeBond()
+    {
+        Console.WriteLine("Add bond");
+        string bondName = GetBondNameFromUser();
+        string currency = GetCurrencyFromUser();
+        decimal faceValue = GetFaceValueFromUser();
+
+        Console.WriteLine("Choose bond type: \n (1) - for fix bond \n (2) - for zero bond:");
+        var bondType = Console.ReadLine();
+
+        var bond = new Bond();
+        if (bondType == "1")
+        {
+            decimal coupon = GetCouponFromUser();
+            bond = new FixBond
+            {
+                BondName = bondName,
+                Currency = currency,
+                FaceValue = faceValue,
+                Coupon = coupon
+            };
+        }
+        else if (bondType == "2")
+        {
+            bond = new ZeroBond
+            {
+                BondName = bondName,
+                Currency = currency,
+                FaceValue = faceValue,
+            };
+        }
+        return bond;
+    }
+
+    public int SelectBondToRemove(IBondsProvider bondsProvider)
+    {
+        Console.WriteLine("Remove bond");
+
+        int idToRemove = GetBondIdFromUser();
+        var existingIds = bondsProvider.GetIds();
+        if (existingIds.Count == 0)
+        {
+            Console.WriteLine("No bonds in portfolio to remove");
+        }
+        else
+        {
+            while (!existingIds.Contains(idToRemove))
+            {
+                Console.WriteLine($"ID:{idToRemove} does not exist in the repository");
+                idToRemove = GetBondIdFromUser();
+            }       
+        }
+        return idToRemove;
     }
 }

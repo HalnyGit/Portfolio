@@ -2,6 +2,7 @@
 using Portfolio.Entities;
 using Portfolio.FileManager;
 using Portfolio.Repositories;
+using Portfolio.Repositories.EventHandlers;
 using Portfolio.UserCommunication;
 
 namespace Portfolio;
@@ -12,16 +13,19 @@ public class App : IApp
     private readonly IBondsProvider _bondsProvider;
     private readonly IUserCommunication _userCommunication;
     private readonly IFileManager _fileManager;
+    private readonly EventHandlers _eventHandlers;
 
     public App(IRepository<Bond> bondsRepository,
                 IBondsProvider bondsProvider,
                 IUserCommunication userCommunication,
-                IFileManager fileManager)
+                IFileManager fileManager,
+                EventHandlers eventHandlers)
     {
         _bondsRepository = bondsRepository;
         _bondsProvider = bondsProvider;
         _userCommunication = userCommunication;
         _fileManager = fileManager;
+        _eventHandlers = eventHandlers;
     }
 
     public void Run()
@@ -29,10 +33,8 @@ public class App : IApp
         _fileManager.CreateDirectoryIfNotExists();
         _fileManager.CreateFilesIfNotExist();
         _fileManager.LoadBondsFromFileToRepository(_bondsRepository);
-
-        _bondsRepository.ItemAdded += BondRepositoryOnItemAdded;
-        _bondsRepository.ItemRemoved += BondRepositoryOnItemRemoved;
-
+        _bondsRepository.ItemAdded += _eventHandlers.BondAddedEventHandler;
+        _bondsRepository.ItemRemoved += _eventHandlers.BondRepositoryOnItemRemoved;
 
         Console.WriteLine("====================================");
 
@@ -49,62 +51,19 @@ public class App : IApp
             }
             else if (input == "2") // add bond
             {
-                Console.WriteLine("Add bond");
-                string bondName = _userCommunication.GetBondNameFromUser();
-                string currency = _userCommunication.GetCurrencyFromUser();
-                decimal faceValue = _userCommunication.GetFaceValueFromUser();
-
-                Console.WriteLine("Choose bond type: \n (1) - for fix bond \n (2) - for zero bond:");
-                var bondType = Console.ReadLine();
-
-                var bond = new Bond();
-                if (bondType == "1")
-                {
-                    decimal coupon = _userCommunication.GetCouponFromUser();
-                    bond = new FixBond
-                    {
-                        BondName = bondName,
-                        Currency = currency,
-                        FaceValue = faceValue,
-                        Coupon = coupon
-                    };
-                }
-                else if (bondType == "2")
-                {
-                    bond = new ZeroBond
-                    {
-                        BondName = bondName,
-                        Currency = currency,
-                        FaceValue = faceValue,
-                    };
-                }
-                _bondsRepository.Add(bond);
+                
+                _bondsRepository.Add(_userCommunication.MakeBond());
             }
             else if (input == "3") // remove bond
             {
-                Console.WriteLine("Remove bond");
-
-                int idToRemove = _userCommunication.GetBondIdFromUser();
-                var existingIds = _bondsProvider.GetIds();
-                if(existingIds.Count == 0)
-                {
-                    Console.WriteLine("No bonds in portfolio to remove");
-                }
-                else
-                {
-                    while (!existingIds.Contains(idToRemove))
-                    {
-                        Console.WriteLine($"ID:{idToRemove} does not exist in the repository");
-                        idToRemove = _userCommunication.GetBondIdFromUser();
-                    }
-                    Bond bondToRemove = _bondsRepository.GetById(idToRemove);
-                    _bondsRepository.Remove(bondToRemove);
-                }              
+                Bond bondToRemove = _bondsRepository.GetById(_userCommunication.SelectBondToRemove(_bondsProvider));
+                _bondsRepository.Remove(bondToRemove);   
             }
 
-            if(input == "q") // quit application
+            if (input == "q") // quit application
             {
                 //_bondsProvider.Save();
+                _fileManager.SaveRepositoryToFile(_bondsRepository);
                 closeApp = true;
                 _userCommunication.DisplayMessage("Application closed");
                 break;
@@ -115,7 +74,6 @@ public class App : IApp
                 _userCommunication.ShowMenu();
             }
         }
-
     }
 
     //public static List<Bond> GenerateSampleBonds()
@@ -181,9 +139,4 @@ public class App : IApp
     //       },
     //    };
     //}
-
-
-
-
-
 }

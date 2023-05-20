@@ -1,6 +1,6 @@
-﻿
+﻿using Portfolio.DataProviders;
 using Portfolio.Entities;
-using Portfolio.Repositories;
+
 
 namespace Portfolio.UserCommunication;
 
@@ -14,4 +14,6 @@ public interface IUserCommunication
     decimal GetFaceValueFromUser();
     decimal GetCouponFromUser();
     void DisplayMessage(string message);
+    Bond MakeBond();
+    int SelectBondToRemove(IBondsProvider bondsProvider);
 }

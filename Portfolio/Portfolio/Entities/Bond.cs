@@ -1,5 +1,4 @@
-﻿
-namespace Portfolio.Entities;
+﻿namespace Portfolio.Entities;
 
 public class Bond : EntityBase
 {
