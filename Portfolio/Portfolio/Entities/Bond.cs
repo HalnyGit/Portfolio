@@ -6,6 +6,9 @@ public class Bond : EntityBase
     public string? Currency { get; set; }
     public decimal? FaceValue { get; set; }
     public decimal? Coupon { get; set; }
+    public DateTime Maturity { get; set; }
+    public decimal? Price { get; set; }
+
 
     public Bond()
     {
@@ -16,7 +19,8 @@ public class Bond : EntityBase
         Coupon = coupon;
     }
 
-    public override string ToString() => $"Id: {Id}, BondName: {BondName}, Currency: {Currency}, FaceValue: {FaceValue}, Coupon: {Coupon}";
+    public override string ToString() => $"Id: {Id}, BondName: {BondName}, Currency: {Currency}, Coupon: {Coupon}, Maturity:{Maturity.ToShortDateString()}";
+
 
 
 

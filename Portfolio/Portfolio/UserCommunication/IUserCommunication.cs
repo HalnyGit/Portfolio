@@ -16,4 +16,5 @@ public interface IUserCommunication
     void DisplayMessage(string message);
     Bond MakeBond();
     int SelectBondToRemove(IBondsProvider bondsProvider);
+    DateTime GetMaturityDateFromUser();
 }

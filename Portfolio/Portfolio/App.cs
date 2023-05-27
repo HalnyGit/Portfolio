@@ -1,4 +1,5 @@
-﻿using Portfolio.DataProviders;
+﻿using Portfolio.CsvReader;
+using Portfolio.DataProviders;
 using Portfolio.Entities;
 using Portfolio.FileManager;
 using Portfolio.Repositories;
@@ -14,66 +15,73 @@ public class App : IApp
     private readonly IUserCommunication _userCommunication;
     private readonly IFileManager _fileManager;
     private readonly EventHandlers _eventHandlers;
+    private readonly ICsvReader _csvReader;
 
     public App(IRepository<Bond> bondsRepository,
                 IBondsProvider bondsProvider,
                 IUserCommunication userCommunication,
                 IFileManager fileManager,
-                EventHandlers eventHandlers)
+                EventHandlers eventHandlers,
+                ICsvReader csvReader)
     {
         _bondsRepository = bondsRepository;
         _bondsProvider = bondsProvider;
         _userCommunication = userCommunication;
         _fileManager = fileManager;
         _eventHandlers = eventHandlers;
+        _csvReader = csvReader;
     }
 
     public void Run()
     {
-        _fileManager.CreateDirectoryIfNotExists();
-        _fileManager.CreateFilesIfNotExist();
-        _fileManager.LoadBondsFromFileToRepository(_bondsRepository);
-        _bondsRepository.ItemAdded += _eventHandlers.BondAddedEventHandler;
-        _bondsRepository.ItemRemoved += _eventHandlers.BondRepositoryOnItemRemoved;
+        //var fixingBonds = _csvReader.ProcessFixingBonds("Resources\\Files\\bonds.csv");
+        //var fixings = _csvReader.ProcessFixing("Resources\\Files\\fixing.csv");
+        //var stats = _csvReader.ProcessStats("Resources\\Files\\stats.csv");
 
-        Console.WriteLine("====================================");
+        //_fileManager.CreateDirectoryIfNotExists();
+        //_fileManager.CreateFilesIfNotExist();
+        //_fileManager.LoadBondsFromFileToRepository(_bondsRepository);
+        //_bondsRepository.ItemAdded += _eventHandlers.BondAdded;
+        //_bondsRepository.ItemRemoved += _eventHandlers.BondRemoved;
 
-        _userCommunication.ShowMenu();
+        //Console.WriteLine("====================================");
 
-        bool closeApp = false;
+        //_userCommunication.ShowMenu();
 
-        while(true)
-        {
-            var input = Console.ReadLine();
-            if(input == "1") // display portfolio
-            {
-                _userCommunication.DisplayPortfolio(_bondsProvider.GetBonds());
-            }
-            else if (input == "2") // add bond
-            {
-                
-                _bondsRepository.Add(_userCommunication.MakeBond());
-            }
-            else if (input == "3") // remove bond
-            {
-                Bond bondToRemove = _bondsRepository.GetById(_userCommunication.SelectBondToRemove(_bondsProvider));
-                _bondsRepository.Remove(bondToRemove);   
-            }
+        //bool closeApp = false;
 
-            if (input == "q") // quit application
-            {
-                //_bondsProvider.Save();
-                _fileManager.SaveRepositoryToFile(_bondsRepository);
-                closeApp = true;
-                _userCommunication.DisplayMessage("Application closed");
-                break;
-            }
-            else
-            {
-                _userCommunication.DisplayMessage("\nPlease continue, select an action from the menu:");
-                _userCommunication.ShowMenu();
-            }
-        }
+        //while(true)
+        //{
+        //    var input = Console.ReadLine();
+        //    if(input == "1") // display portfolio
+        //    {
+        //        _userCommunication.DisplayPortfolio(_bondsProvider.GetBonds());
+        //    }
+        //    else if (input == "2") // add bond
+        //    {
+
+        //        _bondsRepository.Add(_userCommunication.MakeBond());
+        //    }
+        //    else if (input == "3") // remove bond
+        //    {
+        //        Bond bondToRemove = _bondsRepository.GetById(_userCommunication.SelectBondToRemove(_bondsProvider));
+        //        _bondsRepository.Remove(bondToRemove);   
+        //    }
+
+        //    if (input == "q") // quit application
+        //    {
+        //        //_bondsProvider.Save();
+        //        _fileManager.SaveRepositoryToFile(_bondsRepository);
+        //        closeApp = true;
+        //        _userCommunication.DisplayMessage("Application closed");
+        //        break;
+        //    }
+        //    else
+        //    {
+        //        _userCommunication.DisplayMessage("\nPlease continue, select an action from the menu:");
+        //        _userCommunication.ShowMenu();
+        //    }
+        //}
     }
 
     //public static List<Bond> GenerateSampleBonds()

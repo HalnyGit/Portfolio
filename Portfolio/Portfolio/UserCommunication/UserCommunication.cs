@@ -93,7 +93,7 @@ public class UserCommunication : IUserCommunication
         Console.WriteLine("Add bond");
         string bondName = GetBondNameFromUser();
         string currency = GetCurrencyFromUser();
-        decimal faceValue = GetFaceValueFromUser();
+        DateTime maturityDate = GetMaturityDateFromUser();
 
         Console.WriteLine("Choose bond type: \n (1) - for fix bond \n (2) - for zero bond:");
         var bondType = Console.ReadLine();
@@ -106,8 +106,8 @@ public class UserCommunication : IUserCommunication
             {
                 BondName = bondName,
                 Currency = currency,
-                FaceValue = faceValue,
-                Coupon = coupon
+                Coupon = coupon,
+                Maturity = maturityDate
             };
         }
         else if (bondType == "2")
@@ -116,7 +116,7 @@ public class UserCommunication : IUserCommunication
             {
                 BondName = bondName,
                 Currency = currency,
-                FaceValue = faceValue,
+                Maturity = maturityDate
             };
         }
         return bond;
@@ -142,4 +142,43 @@ public class UserCommunication : IUserCommunication
         }
         return idToRemove;
     }
+
+    public DateTime GetMaturityDateFromUser()
+    {
+        DateTime maturityDate = default(DateTime);
+        bool canParse = false;
+        while (!canParse)
+        {
+            Console.WriteLine("Input maturity date");
+
+            int year = intParser("Input year (must be number)");
+            int month = intParser("Input month (must be number)");
+            int day = intParser("Input day (must be number)");
+
+            try
+            {
+                maturityDate = new DateTime(year, month, day);
+                canParse = true;
+            }
+            catch(ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("This date is not valid. Please try again.");
+            }
+        }
+        return maturityDate;
+    }
+
+    public int intParser(string message)
+    {
+        int i = 0;
+        bool canParse = false;
+        while (!canParse)
+        {
+            Console.WriteLine(message);
+            var input = Console.ReadLine();
+            canParse = int.TryParse(input, out i);
+        }
+        return i;
+    }
 }
+
