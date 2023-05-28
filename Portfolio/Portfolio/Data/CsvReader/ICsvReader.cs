@@ -1,6 +1,6 @@
-﻿using Portfolio.CsvReader.Models;
+﻿using Portfolio.Data.CsvReader.Models;
 
-namespace Portfolio.CsvReader;
+namespace Portfolio.Data.CsvReader;
 
 public interface ICsvReader
 {

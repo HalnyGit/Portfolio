@@ -1,6 +1,6 @@
 ﻿using Portfolio.Entities;
 
-namespace Portfolio.DataProviders;
+namespace Portfolio.Data.DataProviders;
 
 public interface IBondsProvider
 {

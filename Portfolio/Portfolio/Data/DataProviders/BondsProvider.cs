@@ -1,7 +1,7 @@
 ﻿using Portfolio.Entities;
 using Portfolio.Repositories;
 
-namespace Portfolio.DataProviders;
+namespace Portfolio.Data.DataProviders;
 
 public class BondsProvider : IBondsProvider
 {
@@ -10,7 +10,7 @@ public class BondsProvider : IBondsProvider
 
     public BondsProvider(IRepository<Bond> bondsRepository)
     {
-        _bondsRepository= bondsRepository;
+        _bondsRepository = bondsRepository;
 
     }
 
@@ -43,11 +43,11 @@ public class BondsProvider : IBondsProvider
         return GetBonds().Select(bond => bond.Coupon).Max();
     }
 
-// order by
+    // order by
     public List<Bond> OrderyByCoupon()
-{
-    return GetBonds().OrderBy(bond => bond.Coupon).ToList();
-}
+    {
+        return GetBonds().OrderBy(bond => bond.Coupon).ToList();
+    }
     public List<Bond> OrderByCurrencyAndCoupon()
     {
         return GetBonds()

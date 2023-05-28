@@ -1,6 +1,9 @@
-﻿using Portfolio.CsvReader.Extensions;
-using Portfolio.DataProviders;
+﻿using Portfolio.Data.CsvReader.Extensions;
+using Portfolio.Data.CsvReader.Models;
+using Portfolio.Data.DataProviders;
 using Portfolio.Entities;
+using Portfolio.Data.XmlManager;
+using System.Collections.Generic;
 
 namespace Portfolio.UserCommunication;
 
@@ -186,18 +189,38 @@ public class UserCommunication : IUserCommunication
 
     public void ProcessMarketInfo(MarketStats marketStats)
     {
+        List<BondInfo> bondList = new List<BondInfo>();
+
         Console.WriteLine("Best yielding bonds up to 2 years:");
-        marketStats.WriteToConsoleBestYieldingBondWithinMaturitiesRange(2);
+        var bestYieldingBondUp2y = marketStats.GetBestYieldingBondWithinMaturitiesRange(2);
+        marketStats.WriteToConsoleBestYieldingBond(bestYieldingBondUp2y);
+        if(bestYieldingBondUp2y != null)
+        {
+            bondList.Add(bestYieldingBondUp2y);
+        }
+
         Console.WriteLine("\nBest yielding bonds from 2 to 5 years:");
-        marketStats.WriteToConsoleBestYieldingBondWithinMaturitiesRange(2, 5);
+        var bestYieldingBondBetween2And5y = marketStats.GetBestYieldingBondWithinMaturitiesRange(2, 5);
+        marketStats.WriteToConsoleBestYieldingBond(bestYieldingBondBetween2And5y);
+        if (bestYieldingBondBetween2And5y != null)
+        {
+            bondList.Add(bestYieldingBondBetween2And5y);
+        }
+
         Console.WriteLine("\nBest yielding bonds from 5 years:");
-        marketStats.WriteToConsoleBestYieldingBondWithinMaturitiesRange(null, 5);
+        var bestYieldingBondAfter5y = marketStats.GetBestYieldingBondWithinMaturitiesRange(null, 5);
+        marketStats.WriteToConsoleBestYieldingBond(bestYieldingBondAfter5y);
+        if (bestYieldingBondAfter5y != null)
+        {
+            bondList.Add(bestYieldingBondAfter5y);
+        }
 
         Console.WriteLine("\nExport data to xml file? y - for yes, any key - for no");
         var saveToXml = Console.ReadLine();
         if (saveToXml == "y")
         {
-            // write data to xml file
+            var xmlManager = new XmlManager();
+            xmlManager.CreateXmlDocWithBestYieldingBonds(bondList);
             Console.WriteLine("Data exported to xml");
         }
     }

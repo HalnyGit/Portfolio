@@ -1,5 +1,5 @@
-﻿using Portfolio.CsvReader.Extensions;
-using Portfolio.DataProviders;
+﻿using Portfolio.Data.CsvReader.Extensions;
+using Portfolio.Data.DataProviders;
 using Portfolio.Entities;
 
 

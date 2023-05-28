@@ -1,6 +1,6 @@
-﻿using Portfolio.CsvReader.Models;
+﻿using Portfolio.Data.CsvReader.Models;
 
-namespace Portfolio.CsvReader.Extensions;
+namespace Portfolio.Data.CsvReader.Extensions;
 
 public class MarketStats
 {
@@ -63,7 +63,7 @@ public class MarketStats
         }
     }
 
-    public void WriteToConsoleBestYieldingBondWithinMaturitiesRange(int? lowerBound = null, int? upperBound = null)
+    public BondInfo? GetBestYieldingBondWithinMaturitiesRange(int? lowerBound = null, int? upperBound = null)
     {
         var bonds = ProcessBondsAndFixingsAndTurnover();
         var filteredBonds = bonds;
@@ -85,9 +85,15 @@ public class MarketStats
             .OrderByDescending(bond => bond.FixingYield)
             .FirstOrDefault();
 
-        if (maxYieldingBond != null)
+        return maxYieldingBond;
+    }
+
+    public void WriteToConsoleBestYieldingBond(BondInfo? bondInfo)
+    {
+
+        if (bondInfo != null)
         {
-            Console.WriteLine(maxYieldingBond);
+            Console.WriteLine($"{bondInfo}\n");
         }
         else
         {

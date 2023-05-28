@@ -1,6 +1,6 @@
-﻿using Portfolio.CsvReader;
-using Portfolio.CsvReader.Extensions;
-using Portfolio.DataProviders;
+﻿using Portfolio.Data.CsvReader;
+using Portfolio.Data.CsvReader.Extensions;
+using Portfolio.Data.DataProviders;
 using Portfolio.Entities;
 using Portfolio.FileManager;
 using Portfolio.Repositories;
@@ -39,12 +39,6 @@ public class App : IApp
 
     public void Run()
     {
-        //var fixingBonds = _csvReader.ProcessFixingBonds("Resources\\Files\\bonds.csv");
-        //var fixings = _csvReader.ProcessFixing("Resources\\Files\\fixing.csv");
-        //var stats = _csvReader.ProcessStats("Resources\\Files\\stats.csv");
-
-
-
         _fileManager.CreateDirectoryIfNotExists();
         _fileManager.CreateFilesIfNotExist();
         _fileManager.LoadBondsFromFileToRepository(_bondsRepository);
@@ -78,7 +72,7 @@ public class App : IApp
             {
                 _marketStats.WriteMarketInfoToConsole();
             }
-            else if (input == "5")
+            else if (input == "5") // show best yielding bonds and save to xml
             {
                 _userCommunication.ProcessMarketInfo(_marketStats);
             }
@@ -98,68 +92,4 @@ public class App : IApp
             }
         }
     }
-
-    //public static List<Bond> GenerateSampleBonds()
-    //{
-    //    return new List<Bond>
-    //    {
-    //       new FixBond
-    //       {
-    //           BondName = "DS1023",
-    //           Currency = "PLN",
-    //           FaceValue = 1000,
-    //           Coupon = 4.0M,
-    //       },
-    //       new FixBond
-    //       {
-    //           BondName = "PS0424",
-    //           Currency = "PLN",
-    //           FaceValue = 1000,
-    //           Coupon = 2.5M,
-    //       },
-    //       new FixBond
-    //       {
-    //           BondName = "DS0725",
-    //           Currency = "PLN",
-    //           FaceValue = 1000,
-    //           Coupon = 3.25M,
-    //       },
-    //       new FixBond
-    //       {
-    //           BondName = "DS1033",
-    //           Currency = "PLN",
-    //           FaceValue = 1000,
-    //           Coupon = 6.0M,
-    //       },
-
-    //       new FixBond
-    //       {
-    //           BondName = "US0233",
-    //           Currency = "USD",
-    //           FaceValue = 1000,
-    //           Coupon = 3.5M,
-    //       },
-
-    //       new FixBond
-    //       {
-    //           BondName = "DE0233",
-    //           Currency = "EUR",
-    //           FaceValue = 1000,
-    //           Coupon = 2.3M,
-    //       },
-
-    //       new ZeroBond
-    //       {
-    //           BondName = "OK0724",
-    //           Currency = "PLN",
-    //           FaceValue = 1000,
-    //       },
-    //       new ZeroBond
-    //       {
-    //           BondName = "OK1025",
-    //           Currency = "PLN",
-    //           FaceValue = 1000,
-    //       },
-    //    };
-    //}
 }

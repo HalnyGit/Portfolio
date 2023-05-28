@@ -1,5 +1,4 @@
-﻿using Portfolio.Data;
-using Portfolio.Entities;
+﻿using Portfolio.Entities;
 using Portfolio.Repositories;
 using System.Text.Json;
 

@@ -1,9 +1,7 @@
-﻿
-
-using Portfolio.CsvReader.Models;
+﻿using Portfolio.Data.CsvReader.Models;
 using System.Globalization;
 
-namespace Portfolio.CsvReader.Extensions;
+namespace Portfolio.Data.CsvReader.Extensions;
 
 public static class FixingBondExtensions
 {

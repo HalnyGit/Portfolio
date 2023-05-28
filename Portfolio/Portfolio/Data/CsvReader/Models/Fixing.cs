@@ -1,6 +1,4 @@
-﻿
-
-namespace Portfolio.CsvReader.Models;
+﻿namespace Portfolio.Data.CsvReader.Models;
 
 public class Fixing
 {

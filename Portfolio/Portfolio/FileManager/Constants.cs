@@ -1,6 +1,4 @@
-﻿
-
-namespace Portfolio.Data;
+﻿namespace Portfolio.FileManager;
 
 public static class Constants
 {
@@ -10,6 +8,6 @@ public static class Constants
 
 }
 
-    
+
 
 

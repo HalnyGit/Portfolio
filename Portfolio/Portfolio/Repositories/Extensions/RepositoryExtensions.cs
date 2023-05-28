@@ -2,7 +2,7 @@
 using System.Data;
 using System.Text.Json;
 
-namespace Portfolio.Repositories.RepositoryExtensions;
+namespace Portfolio.Repositories.Extensions;
 
 public static class RepositoryExtensions
 {

@@ -1,15 +1,14 @@
-﻿
-using Portfolio.CsvReader.Extensions;
-using Portfolio.CsvReader.Models;
+﻿using Portfolio.Data.CsvReader.Extensions;
+using Portfolio.Data.CsvReader.Models;
 using System.Globalization;
 
-namespace Portfolio.CsvReader;
+namespace Portfolio.Data.CsvReader;
 
 public class CsvReader : ICsvReader
 {
     public List<FixingBond> ProcessFixingBonds(string filePath)
     {
-        if(!File.Exists(filePath))
+        if (!File.Exists(filePath))
         {
             return new List<FixingBond>();
         }
@@ -37,10 +36,10 @@ public class CsvReader : ICsvReader
                 var columns = line.Split(',');
                 return new Fixing
                 {
-                      Name = columns[0],
-                      Isin = columns[1],
-                      FixingPrice = decimal.Parse(columns[6], CultureInfo.InvariantCulture),
-                      FixingYield = decimal.Parse(columns[7], CultureInfo.InvariantCulture)
+                    Name = columns[0],
+                    Isin = columns[1],
+                    FixingPrice = decimal.Parse(columns[6], CultureInfo.InvariantCulture),
+                    FixingYield = decimal.Parse(columns[7], CultureInfo.InvariantCulture)
                 };
             });
 
@@ -63,7 +62,7 @@ public class CsvReader : ICsvReader
                 return new Stats
                 {
                     Name = columns[0],
-                    Volume = decimal.Parse(columns[1].Replace(" ",""), CultureInfo.InvariantCulture),
+                    Volume = decimal.Parse(columns[1].Replace(" ", ""), CultureInfo.InvariantCulture),
                     Value = decimal.Parse(columns[2].Replace(" ", ""), CultureInfo.InvariantCulture),
                     NumberOfTransactions = int.Parse(columns[3])
                 };

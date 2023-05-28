@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Portfolio;
-using Portfolio.CsvReader;
-using Portfolio.CsvReader.Extensions;
-using Portfolio.DataProviders;
+using Portfolio.Data.CsvReader;
+using Portfolio.Data.CsvReader.Extensions;
+using Portfolio.Data.DataProviders;
 using Portfolio.Entities;
 using Portfolio.FileManager;
 using Portfolio.Repositories;
