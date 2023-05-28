@@ -16,7 +16,6 @@ public class App : IApp
     private readonly IUserCommunication _userCommunication;
     private readonly IFileManager _fileManager;
     private readonly EventHandlers _eventHandlers;
-    private readonly ICsvReader _csvReader;
     private readonly MarketStats _marketStats;
 
     public App(IRepository<Bond> bondsRepository,
@@ -24,7 +23,6 @@ public class App : IApp
                 IUserCommunication userCommunication,
                 IFileManager fileManager,
                 EventHandlers eventHandlers,
-                ICsvReader csvReader,
                 MarketStats marketStats)
     {
         _bondsRepository = bondsRepository;
@@ -32,7 +30,6 @@ public class App : IApp
         _userCommunication = userCommunication;
         _fileManager = fileManager;
         _eventHandlers = eventHandlers;
-        _csvReader = csvReader;
         _marketStats = marketStats;
     }
 
