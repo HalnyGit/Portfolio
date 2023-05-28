@@ -7,7 +7,6 @@ using Portfolio.Repositories;
 using Portfolio.Repositories.EventHandlers;
 using Portfolio.UserCommunication;
 
-
 namespace Portfolio;
 
 public class App : IApp
