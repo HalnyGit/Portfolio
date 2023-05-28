@@ -1,4 +1,5 @@
-﻿using Portfolio.DataProviders;
+﻿using Portfolio.CsvReader.Extensions;
+using Portfolio.DataProviders;
 using Portfolio.Entities;
 
 
@@ -17,4 +18,5 @@ public interface IUserCommunication
     Bond MakeBond();
     int SelectBondToRemove(IBondsProvider bondsProvider);
     DateTime GetMaturityDateFromUser();
+    void ProcessMarketInfo(MarketStats marketStats);
 }

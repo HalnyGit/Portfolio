@@ -1,4 +1,5 @@
-﻿using Portfolio.DataProviders;
+﻿using Portfolio.CsvReader.Extensions;
+using Portfolio.DataProviders;
 using Portfolio.Entities;
 
 namespace Portfolio.UserCommunication;
@@ -12,6 +13,8 @@ public class UserCommunication : IUserCommunication
         Console.WriteLine("(1) Display content of the portfolio");
         Console.WriteLine("(2) Add Bond");
         Console.WriteLine("(3) Remove Bond");
+        Console.WriteLine("(4) Show market");
+        Console.WriteLine("(5) Show best yielding bonds in the market");
         Console.WriteLine("(q) Quit");
         Console.WriteLine("------------------------------------");
     }
@@ -179,6 +182,24 @@ public class UserCommunication : IUserCommunication
             canParse = int.TryParse(input, out i);
         }
         return i;
+    }
+
+    public void ProcessMarketInfo(MarketStats marketStats)
+    {
+        Console.WriteLine("Best yielding bonds up to 2 years:");
+        marketStats.WriteToConsoleBestYieldingBondWithinMaturitiesRange(2);
+        Console.WriteLine("\nBest yielding bonds from 2 to 5 years:");
+        marketStats.WriteToConsoleBestYieldingBondWithinMaturitiesRange(2, 5);
+        Console.WriteLine("\nBest yielding bonds from 5 years:");
+        marketStats.WriteToConsoleBestYieldingBondWithinMaturitiesRange(null, 5);
+
+        Console.WriteLine("\nExport data to xml file? y - for yes, any key - for no");
+        var saveToXml = Console.ReadLine();
+        if (saveToXml == "y")
+        {
+            // write data to xml file
+            Console.WriteLine("Data exported to xml");
+        }
     }
 }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Portfolio;
 using Portfolio.CsvReader;
+using Portfolio.CsvReader.Extensions;
 using Portfolio.DataProviders;
 using Portfolio.Entities;
 using Portfolio.FileManager;
@@ -16,6 +17,7 @@ services.AddSingleton<IUserCommunication, UserCommunication>();
 services.AddSingleton<IFileManager, FileManager>();
 services.AddSingleton<EventHandlers>();
 services.AddSingleton<ICsvReader, CsvReader>();
+services.AddSingleton<MarketStats>();
 
 var serviceProvider = services.BuildServiceProvider();
 var app = serviceProvider.GetService<IApp>();
